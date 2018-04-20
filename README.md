@@ -5,6 +5,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## !!
 No node_module folder here, use your own by linking it or just copy paste it into the same fold as READ.md You will need express, p5.js and socket.io.
 
+game/main/main.component.ts has the canvas logics.
+
+You need to run the drawing server 
+The drawing server uses port 3001 by default. run 'node server.js' and 'ng serve'
+
 
 ## Development server
 
