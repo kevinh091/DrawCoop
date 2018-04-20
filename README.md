@@ -3,8 +3,8 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
 
 ## !!
-No node_module folder here, use your own by linking it or just copy paste it into the same fold as READ.md
-You will need express, p5.js and socket.io.
+No node_module folder here, use your own by linking it or just copy paste it into the same fold as READ.md You will need express, p5.js and socket.io.
+
 
 ## Development server
 
