@@ -11,12 +11,11 @@ export class MainComponent implements OnInit {
 
   socket: SocketIOClient.Socket;
   myP: any;
-  points = [];
-  last_drew ={isLine: false,x:0,y:0};
+  last_drew ={ isLine:false , x:0 , y:0 };
   //last_emited = 0;
 
   constructor() { 
-    this.socket = io.connect('localhost:3001');
+    this.socket = io.connect('jiqing666.com:3001');
   }
 
   ngOnInit() {
@@ -30,9 +29,10 @@ export class MainComponent implements OnInit {
 
       p.setup = () => {
         canvas = p.createCanvas(1400, 900);
-        p.background(50,50,50);
+        p.background(70,70,70);
       }
 
+      
       
       p.draw = () => {
         if(p.mouseIsPressed){
@@ -43,27 +43,20 @@ export class MainComponent implements OnInit {
             //var c = p.color(180, 180, 150); // Define color 'c'
            // p.fill(c); 
            if(!this.last_drew.isLine){
-             p.ellipse(p.mouseX, p.mouseY, 5,5);
-             this.last_drew.isLine = true;
+            this.socket.emit('draw', {
+              x1:p.mouseX, y1:p.mouseY, x2:p.mouseX, y2:p.mouseY
+              }
+            );
+            this.last_drew.isLine = true;
            }else{
-            p.line(p.mouseX, p.mouseY, this.last_drew.x, this.last_drew.y);
-            p.strokeWeight(6);
+            if(p.mouseX == this.last_drew.x && p.mouseY ==this.last_drew.y){return;}
+            this.socket.emit('draw', {
+              x1:p.mouseX, y1:p.mouseY, x2:this.last_drew.x ,y2:this.last_drew.y
+              }
+            );
            }
           this.last_drew.x=p.mouseX;
           this.last_drew.y = p.mouseY;
-          //p.ellipse(p.mouseX, p.mouseY, 20, 20);
-          /*if(this.last_added.x !=p.mouseX && this.last_added.y != p.mouseY) {
-            this.points.push({x:p.mouseX, y:p.mouseY});
-            this.last_added ={x:p.mouseX, y:p.mouseY};
-          }*/
-          /*let millisecond = p.millis();
-          if(millisecond-this.last_emited>1000){
-            this.socket.emit('draw', 
-              this.points
-            );
-            this.last_emited = millisecond;
-            this.points = [];
-          }*/
         }
         else{
           this.last_drew.isLine = false;
@@ -75,14 +68,11 @@ export class MainComponent implements OnInit {
 
 
     this.socket.on('draw',(data) => {
-      for(let i=0;i<data.length;i++){
-        this.myP.ellipse(data[i].x, data[i].y, 8, 8);
-      }
+      this.myP.line(data.x1, data.y1, data.x2, data.y2);
+      this.myP.strokeWeight(4);
     }
 
     );
-  }
-
-
+  }  //close on ngOnInit
 }
 

@@ -2,6 +2,7 @@ var clients = [];
 
 
 var express = require('express');
+//
 
 var app = express();
 
@@ -16,6 +17,7 @@ function listen(){
 app.use(express.static('public'));
 
 var io = require('socket.io')(server);
+//
 
 io.sockets.on('connection',
 	function(socket){
