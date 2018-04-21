@@ -2,6 +2,7 @@ var clients = [];
 
 // Using express
 var express = require('express');
+//    /usr/local/lib/node_modules   use this on depolyment
 
 // get web application
 var app = express();
