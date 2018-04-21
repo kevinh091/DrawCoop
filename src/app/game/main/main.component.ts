@@ -7,6 +7,8 @@ declare var p5: any;
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
+
+
 export class MainComponent implements OnInit {
 
   socket: SocketIOClient.Socket;
@@ -51,15 +53,15 @@ export class MainComponent implements OnInit {
     let player = new p5(s);
     this.socket.on('draw', this.onDraw);
   }  //close on ngOnInit
-  
-  interface drawEvent{
-    p1 : point,
-    p2 : point
-  }
+}
 
-  interface point{
-    x : number,
-    y : number
-  }
+interface drawEvent{
+  p1 : point,
+  p2 : point
+}
+
+interface point{
+  x : number,
+  y : number
 }
 
