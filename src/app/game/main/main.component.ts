@@ -21,6 +21,7 @@ export class MainComponent implements OnInit {
       console.log("heard");
       this.document.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
       this.document.strokeWeight(4);
+
   }
 
   ngOnInit() {
