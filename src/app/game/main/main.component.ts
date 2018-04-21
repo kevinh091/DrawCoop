@@ -15,7 +15,7 @@ export class MainComponent implements OnInit {
   //last_emited = 0;
 
   constructor() { 
-    this.socket = io.connect('localhost.com:3001');
+    this.socket = io.connect('localhost:3001');
   }
 
   ngOnInit() {
