@@ -40,6 +40,7 @@ export class MainComponent implements OnInit {
       }
 
       myP.draw = () => {
+
         if(myP.mouseIsPressed){
           let event : drawEvent = { p1: { x :myP.mouseX, y:myP.mouseY }, p2:this.last_drew}
           this.socket.emit('draw', event);
