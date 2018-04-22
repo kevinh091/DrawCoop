@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import {ActivatedRoute} from "@angular/router";
+
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
 declare var p5: any;
@@ -18,10 +21,15 @@ export class MainComponent implements OnInit {
   eraser_clicked : boolean;
 
 
-  constructor(private switchColor: SwitchColorService) {
-    this.socket = io.connect('localhost:3001');
-  }
 
+  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
+    this.socket = io.connect('localhost:3001');
+    this.route.params.subscribe(param=>{
+      console.log(param.name);
+      this.socket.emit('join_room', param.name);
+    });
+  }
+  
   onDraw(data) {
       console.log("heard");
       //default pen values
@@ -62,15 +70,19 @@ export class MainComponent implements OnInit {
             p3: { value1:70, value2:70, value3:70}
           }
           this.socket.emit('draw', event);
-          this.onDraw(event);
+        //  this.onDraw(event);
         }
 
-        this.last_drew= { x : myP.mouseX, y : myP.mouseY};
+        this.last_drew = { x : myP.mouseX, y : myP.mouseY};
       }
     }
 
     let player = new p5(s);
-    this.socket.on('draw', this.onDraw);
+    this.socket.on('draw', (data) =>{
+  //    console.log("heard");
+      this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
+      this.myP.strokeWeight(4);
+  });
   }  //close on ngOnInit
 
 
