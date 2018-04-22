@@ -50,28 +50,27 @@ export class MainComponent implements OnInit {
       }
 
       myP.draw = () => {
-
-        //Default Drawing
+        //Default Pen
         if(myP.mouseIsPressed && this.eraser_clicked != true){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
-            p2: this.last_drew,
-            p3: { value1:0, value2:0, value3:0}
+            p2:this.last_drew,
+            p3: { value1:0, value2:0, value3:0},
+            p4: 4
           }
-          // this.socket.emit('draw', event);
+          this.socket.emit('draw', event);
           this.onDraw(event);
         }
 
-        //Clicked Eraser
-        if(this.eraser_clicked == true && myP.mouseIsPressed){
-          console.log("pressed")
+        //Eraser is clicked
+        if(this.eraser_clicked == true && myP.mouseIsPressed ){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
-            p2: this.last_drew,
-            p3: { value1:70, value2:70, value3:70}
+            p2:this.last_drew,
+            p3: { value1:70, value2:70, value3:70},
+            p4: 120
           }
-          this.myP.strokeWeight(80);
-          // this.socket.emit('draw', event);
+          this.socket.emit('draw', event);
           this.onDraw(event);
         }
 
@@ -86,9 +85,10 @@ export class MainComponent implements OnInit {
     let player = new p5(s);
     this.socket.on('draw', (data) =>{
   //    console.log("heard");
+      this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(4);
-  });
+      this.myP.strokeWeight(data.p4);
+    });
   }  //close on ngOnInit
 
 
@@ -120,6 +120,7 @@ interface rgb{
 interface drawEvent{
   p1 : point,
   p2 : point,
-  p3 : rgb
+  p3 : rgb,
+  p4 : number
 }
 
