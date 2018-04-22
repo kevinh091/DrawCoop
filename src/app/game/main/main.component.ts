@@ -59,14 +59,15 @@ export class MainComponent implements OnInit {
           this.socket.emit('draw', event);
           this.onDraw(event);
         }
-        if(this.eraser_clicked == true){
+        if(this.eraser_clicked == true && myP.mouseIsPressed){
+          console.log("pressed")
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
-            p2:this.last_drew,
+            p2: this.last_drew,
             p3: { value1:70, value2:70, value3:70}
           }
           this.socket.emit('draw', event);
-        //  this.onDraw(event);
+          this.onDraw(event);
         }
 
         this.last_drew = { x : myP.mouseX, y : myP.mouseY};
