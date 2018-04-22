@@ -18,4 +18,4 @@ import { SwitchColorService } from './services/switch-color.service';
   providers: [SwitchColorService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -8,6 +8,8 @@ declare var p5: any;
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
+
+
 export class MainComponent implements OnInit {
 
   socket: SocketIOClient.Socket;
@@ -43,6 +45,7 @@ export class MainComponent implements OnInit {
       }
 
       myP.draw = () => {
+
         if(myP.mouseIsPressed){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
@@ -70,6 +73,7 @@ export class MainComponent implements OnInit {
     this.socket.on('draw', this.onDraw);
   }  //close on ngOnInit
 
+
   onClickEraser(){
     this.eraser_clicked = true;
   }
@@ -82,25 +86,22 @@ export class MainComponent implements OnInit {
     console.log('You clicked');
     this.myP.background(0, 0, 0);
   }
+}
 
+interface point{
+  x : number,
+  y : number
+}
 
+interface rgb{
+  value1 : number,
+  value2 : number,
+  value3 : number
+}
 
-
-  interface drawEvent{
-    p1 : point,
-    p2 : point,
-    p3 : rgb
-  }
-
-  interface point{
-    x : number,
-    y : number
-  }
-
-  interface rgb{
-    value1 : number,
-    value2 : number,
-    value3 : number
-  }
+interface drawEvent{
+  p1 : point,
+  p2 : point,
+  p3 : rgb
 }
 
