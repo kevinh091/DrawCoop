@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {ActivatedRoute} from "@angular/router";
+import {CustomDrawingComponent} from './custom-drawing/custom-drawing.component';
 
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
@@ -14,7 +15,7 @@ declare var p5: any;
 
 
 export class MainComponent implements OnInit {
-
+  custom: CustomDrawingComponent;
   socket: SocketIOClient.Socket;
   myP: any;
   last_drew : point;
@@ -27,13 +28,14 @@ export class MainComponent implements OnInit {
       console.log(param.name);
       this.socket.emit('join_room', param.name);
     });
+    this.custom = new CustomDrawingComponent();
   }
  onDraw(data) {
       console.log("heard");
       //default pen values
-      this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
+      this.myP.strokeWeight(this.custom.pen.width);
+      this.myP.stroke(data.color[0], data.color[1], data.color[2]);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(4);
   }
 
   ngOnInit() {
@@ -45,8 +47,8 @@ export class MainComponent implements OnInit {
       }
 
       myP.setup = () => {
-        myP.createCanvas(1400, 900);
-        myP.background(70,70,70);
+        myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+        myP.background(this.custom.canvas.backgroundColor);
       }
 
       myP.draw = () => {
@@ -55,8 +57,8 @@ export class MainComponent implements OnInit {
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
-            p3: { value1:0, value2:0, value3:0},
-            p4: 4
+            color: [0,0,0],
+            width: this.custom.pen.width
           }
           this.socket.emit('draw', event);
           this.onDraw(event);
@@ -67,11 +69,13 @@ export class MainComponent implements OnInit {
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
-            p3: { value1:70, value2:70, value3:70},
-            p4: 120
+            color: this.custom.canvas.backgroundColor,
+            width: 120
           }
           this.socket.emit('draw', event);
           this.onDraw(event);
+          this.custom.canvas.width =1200;
+          myP.background(0,0,0);
         }
 
         if(this.clear_clicked == true){
@@ -85,10 +89,17 @@ export class MainComponent implements OnInit {
     let player = new p5(s);
     this.socket.on('draw', (data) =>{
   //    console.log("heard");
-      this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
+      this.myP.stroke(data.color[0], data.color[1], data.color[2]);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(data.p4);
+      this.myP.strokeWeight(data.width);
     });
+
+    this.socket.on('clear', (data) =>{
+      //    console.log("heard");
+          this.myP.clear();
+          this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+          this.myP.background(this.custom.canvas.backgroundColor);
+        });
   }  //close on ngOnInit
 
 
@@ -101,7 +112,10 @@ export class MainComponent implements OnInit {
 
   }
   onClickClear(){
-    
+    this.socket.emit('clear','');
+    this.myP.clear();
+    this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+    this.myP.background(this.custom.canvas.backgroundColor);
   }
 }
 
@@ -110,16 +124,9 @@ interface point{
   y : number
 }
 
-interface rgb{
-  value1 : number,
-  value2 : number,
-  value3 : number
-}
-
 interface drawEvent{
   p1 : point,
   p2 : point,
-  p3 : rgb,
-  p4 : number
+  color :Array<number>,
+  width : number
 }
-
