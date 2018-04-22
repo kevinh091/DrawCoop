@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import {ActivatedRoute} from "@angular/router";
+
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
 declare var p5: any;
@@ -17,18 +20,19 @@ export class MainComponent implements OnInit {
   last_drew : point;
   eraser_clicked : boolean;
 
-
-  constructor(private switchColor: SwitchColorService) {
+ constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
     this.socket = io.connect('localhost:3001');
+    this.route.params.subscribe(param=>{
+      console.log(param.name);
+      this.socket.emit('join_room', param.name);
+    });
   }
-
-  onDraw(data) {
+ onDraw(data) {
       console.log("heard");
       //default pen values
       this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
       this.myP.strokeWeight(4);
-
   }
 
   ngOnInit() {
@@ -55,22 +59,27 @@ export class MainComponent implements OnInit {
           this.socket.emit('draw', event);
           this.onDraw(event);
         }
-        if(this.eraser_clicked == true){
+        if(this.eraser_clicked == true && myP.mouseIsPressed){
+          console.log("pressed")
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
-            p2:this.last_drew,
+            p2: this.last_drew,
             p3: { value1:70, value2:70, value3:70}
           }
           this.socket.emit('draw', event);
           this.onDraw(event);
         }
 
-        this.last_drew= { x : myP.mouseX, y : myP.mouseY};
+        this.last_drew = { x : myP.mouseX, y : myP.mouseY};
       }
     }
 
     let player = new p5(s);
-    this.socket.on('draw', this.onDraw);
+    this.socket.on('draw', (data) =>{
+  //    console.log("heard");
+      this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
+      this.myP.strokeWeight(4);
+  });
   }  //close on ngOnInit
 
 
