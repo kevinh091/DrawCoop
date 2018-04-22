@@ -20,23 +20,19 @@ export class MainComponent implements OnInit {
   last_drew : point;
   eraser_clicked : boolean;
 
-
-
-  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
+ constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
     this.socket = io.connect('localhost:3001');
     this.route.params.subscribe(param=>{
       console.log(param.name);
       this.socket.emit('join_room', param.name);
     });
   }
-  
-  onDraw(data) {
+ onDraw(data) {
       console.log("heard");
       //default pen values
       this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
       this.myP.strokeWeight(4);
-
   }
 
   ngOnInit() {

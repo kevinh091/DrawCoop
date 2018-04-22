@@ -20,7 +20,7 @@ const appRoutes: Routes = [
     AppComponent,
     MainComponent,
     NotFoundComponent,
-    UiComponent
+    UiComponent,
   ],
   imports: [
     BrowserModule,
