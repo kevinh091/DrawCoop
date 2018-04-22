@@ -101,8 +101,7 @@ export class MainComponent implements OnInit {
 
   }
   onClickClear(){
-    console.log('You clicked Clear');
-    this.onClickClear = true;
+    
   }
 }
 
