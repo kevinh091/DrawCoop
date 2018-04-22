@@ -19,6 +19,7 @@ export class MainComponent implements OnInit {
   myP: any;
   last_drew : point;
   eraser_clicked : boolean;
+  clear_clicked : boolean;
 
  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
     this.socket = io.connect('localhost:3001');
@@ -73,6 +74,10 @@ export class MainComponent implements OnInit {
           this.onDraw(event);
         }
 
+        if(this.clear_clicked == true){
+          
+        }
+
         this.last_drew = { x : myP.mouseX, y : myP.mouseY};
       }
     }
@@ -95,9 +100,9 @@ export class MainComponent implements OnInit {
     this.eraser_clicked = false;
 
   }
-  onClickColor(){
-    console.log('You clicked');
-    this.myP.background(0, 0, 0);
+  onClickClear(){
+    console.log('You clicked Clear');
+    this.onClickClear = true;
   }
 }
 
