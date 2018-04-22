@@ -5,12 +5,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MainComponent } from './game/main/main.component';
 import { SwitchColorService } from './services/switch-color.service';
+import { UiComponent } from './ui/ui.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent
+    MainComponent,
+    UiComponent,
   ],
   imports: [
     BrowserModule
