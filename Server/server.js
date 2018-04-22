@@ -6,6 +6,8 @@ var express = require('express');
 
 // get web application
 var app = express();
+var user_room = {};
+var room_people = {};
 
 // listen to connections on port 3001 for client connections.
 var server = app.listen(3001,() => {
@@ -27,12 +29,45 @@ io.sockets.on('connection', function(socket) {
 		// When draw event is heard, broadcast it to every connected socket
 		socket.on('draw',
 			function(data){
-				socket.broadcast.emit('draw', data);
+				var room = user_room[socket.id];
+				var people = room_people[room];
+				if(people){
+					for(var i = 0; i < people.length; i++){
+						people[i].emit('draw', data);
+					}
+				}else{
+					socket.emit('draw', data);
+				}
+				//socket.emit('draw', data);
+				//socket.broadcast.emit('draw', data);
+			}
+		);
+		socket.on('join_room',
+			function(data){
+				user_room[socket.id] = data;
+				if(!room_people[data]){
+					room_people[data] = [socket];
+				}else{
+					room_people[data].push(socket);
+				}
+				console.log("room joined " + data +" Room Size " + room_people[data].length);
 			}
 		);
 		// When client disconnect.
 		socket.on('disconnect', function() {
+			var room = user_room[socket.id];
+			delete user_room[socket.id];
+			if(!room_people[room]){
+				return;
+			}
+			var people = room_people[room];
+			for(var i = 0; i < people.length; i++){
+				if(people[i].id == socket.id){
+					people.splice(i, 1);
+				}
+			}
       		console.log("Client has disconnected");
+      		console.log("room left " + room + " Room Size " + people.length);
    		});
 	}
 );

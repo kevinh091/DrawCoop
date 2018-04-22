@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import {ActivatedRoute} from "@angular/router";
+
 import * as io from 'socket.io-client';
 declare var p5: any;
 
@@ -15,16 +18,14 @@ export class MainComponent implements OnInit {
   myP: any;
   last_drew : point;
 
-  constructor() { 
+  constructor(private route: ActivatedRoute) { 
     this.socket = io.connect('localhost:3001');
+    this.route.params.subscribe(param=>{
+      console.log(param.name);
+      this.socket.emit('join_room', param.name);
+    });
   }
 
-  onDraw(data) {
-      console.log("heard");
-      this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(4);
-
-  }
 
   ngOnInit() {
     const s = (myP) => {
@@ -43,15 +44,19 @@ export class MainComponent implements OnInit {
         if(myP.mouseIsPressed){
           let event : drawEvent = { p1: { x :myP.mouseX, y:myP.mouseY }, p2:this.last_drew}
           this.socket.emit('draw', event);
-          this.onDraw(event);
+        //  this.onDraw(event);
         }
 
-        this.last_drew= { x : myP.mouseX, y : myP.mouseY};
+        this.last_drew = { x : myP.mouseX, y : myP.mouseY};
       }
     }
 
     let player = new p5(s);
-    this.socket.on('draw', this.onDraw);
+    this.socket.on('draw', (data) =>{
+  //    console.log("heard");
+      this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
+      this.myP.strokeWeight(4);
+  });
   }  //close on ngOnInit
 }
 
