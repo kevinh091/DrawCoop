@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { MainComponent } from './game/main/main.component';
 import { NotFoundComponent } from './game/not-found/not-found.component';
+import { SwitchColorService } from './services/switch-color.service';
+import { UiComponent } from './ui/ui.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full'},
@@ -17,13 +19,14 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     MainComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    UiComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [SwitchColorService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
