@@ -1,3 +1,10 @@
-<button (click) = 'onClickPen()'>Pen</button>
-<button (click) = 'onClickEraser()'>Eraser</button>
-<button (click) = 'onClickClear()'>Clear</button>
+<body *ngIf="toolbar; then yestoolbar else notoolbar"> this works</body>
+<div class = text> Tools </div>
+<ng-template #yestoolbar>
+    <button (click) = 'onClickPen()' class= Pen>Pen</button>
+    <button (click) = 'onClickEraser()' class= Eraser >Eraser</button>
+    <button (click) = 'onClickClear()' class= Clear >Clear</button>
+</ng-template>
+<ng-template #notoolbar>
+
+</ng-template>
