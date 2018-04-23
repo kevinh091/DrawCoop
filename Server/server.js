@@ -42,6 +42,21 @@ io.sockets.on('connection', function(socket) {
 				//socket.broadcast.emit('draw', data);
 			}
 		);
+		socket.on('clear',
+			function(data){
+				var room = user_room[socket.id];
+				var people = room_people[room];
+				if(people){
+					for(var i = 0; i < people.length; i++){
+						people[i].emit('clear', data);
+					}
+				}else{
+					socket.emit('clear', data);
+				}
+				//socket.emit('draw', data);
+				//socket.broadcast.emit('draw', data);
+			}
+		);
 		socket.on('join_room',
 			function(data){
 				user_room[socket.id] = data;
