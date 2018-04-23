@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {ActivatedRoute} from "@angular/router";
+import {CustomDrawingComponent} from './custom-drawing/custom-drawing.component';
 
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
@@ -14,12 +15,13 @@ declare var p5: any;
 
 
 export class MainComponent implements OnInit {
-
+  custom: CustomDrawingComponent;
   socket: SocketIOClient.Socket;
   myP: any;
   last_drew : point;
   eraser_clicked : boolean;
   clear_clicked : boolean;
+  toolbar = false;
 
  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
     this.socket = io.connect('localhost:3001');
@@ -27,15 +29,15 @@ export class MainComponent implements OnInit {
       console.log(param.name);
       this.socket.emit('join_room', param.name);
     });
+    this.custom = new CustomDrawingComponent();
   }
  onDraw(data) {
       console.log("heard");
       //default pen values
-      this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
+      this.myP.strokeWeight(data.width);
+      this.myP.stroke(data.color[0], data.color[1], data.color[2]);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(4);
   }
-
   ngOnInit() {
     const s = (myP) => {
 
@@ -43,20 +45,32 @@ export class MainComponent implements OnInit {
       myP.preload = () => {
         console.log('preload');
       }
-
+      
+      /*myP.keyPressed = ()  => {
+        if (myP.keyCode === myP.SHIFT) {
+          this.toolbar = true;
+        } 
+      }*/
+      
       myP.setup = () => {
-        myP.createCanvas(1400, 900);
-        myP.background(70,70,70);
+        myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+        myP.background(this.custom.canvas.backgroundColor);
       }
-
+      
       myP.draw = () => {
         //Default Pen
+        myP.fill(myP.color(300,150,150));
+        myP.ellipse(10,10,80);
+        if(myP.mouseX<45 && myP.mouseY<45){
+          this.toolbar = true;
+        }
+
         if(myP.mouseIsPressed && this.eraser_clicked != true){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
-            p3: { value1:0, value2:0, value3:0},
-            p4: 4
+            color: [0,0,0],
+            width: this.custom.pen.width
           }
           this.socket.emit('draw', event);
           this.onDraw(event);
@@ -67,8 +81,8 @@ export class MainComponent implements OnInit {
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
-            p3: { value1:70, value2:70, value3:70},
-            p4: 120
+            color: this.custom.canvas.backgroundColor,
+            width: 120
           }
           this.socket.emit('draw', event);
           this.onDraw(event);
@@ -85,24 +99,36 @@ export class MainComponent implements OnInit {
     let player = new p5(s);
     this.socket.on('draw', (data) =>{
   //    console.log("heard");
-      this.myP.stroke(data.p3.value1, data.p3.value2, data.p3.value3);
+      this.myP.stroke(data.color[0], data.color[1], data.color[2]);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(data.p4);
+      this.myP.strokeWeight(data.width);
     });
+
+    this.socket.on('clear', (data) =>{
+      //    console.log("heard");
+          this.myP.clear();
+          this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+          this.myP.background(this.custom.canvas.backgroundColor);
+        });
   }  //close on ngOnInit
 
 
   onClickEraser(){
     this.eraser_clicked = true;
+    this.toolbar = false;
   }
   onClickPen(){
     console.log('You clicked Pen');
     this.eraser_clicked = false;
+    this.toolbar = false;
 
   }
   onClickClear(){
-    console.log('You clicked Clear');
-    this.onClickClear = true;
+    this.socket.emit('clear','');
+    this.myP.clear();
+    this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+    this.myP.background(this.custom.canvas.backgroundColor);
+    this.toolbar = false;
   }
 }
 
@@ -111,16 +137,9 @@ interface point{
   y : number
 }
 
-interface rgb{
-  value1 : number,
-  value2 : number,
-  value3 : number
-}
-
 interface drawEvent{
   p1 : point,
   p2 : point,
-  p3 : rgb,
-  p4 : number
+  color :Array<number>,
+  width : number
 }
-
