@@ -34,8 +34,8 @@ export class MainComponent implements OnInit {
  onDraw(data) {
       console.log("heard");
       //default pen values
-      this.myP.strokeWeight(data.width);
       this.myP.stroke(data.color[0], data.color[1], data.color[2]);
+      this.myP.strokeWeight(data.width);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
   }
   ngOnInit() {
@@ -98,10 +98,7 @@ export class MainComponent implements OnInit {
 
     let player = new p5(s);
     this.socket.on('draw', (data) =>{
-  //    console.log("heard");
-      this.myP.stroke(data.color[0], data.color[1], data.color[2]);
-      this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(data.width);
+      this.onDraw(data);
     });
 
     this.socket.on('clear', (data) =>{
@@ -128,6 +125,7 @@ export class MainComponent implements OnInit {
     this.myP.clear();
     this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
     this.myP.background(this.custom.canvas.backgroundColor);
+    this.eraser_clicked = false;
     this.toolbar = false;
   }
 }
