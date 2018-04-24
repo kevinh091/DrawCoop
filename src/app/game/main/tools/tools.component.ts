@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-tools',
   templateUrl: './tools.component.html',
   styleUrls: ['./tools.component.css']
 })
-export class ToolsComponent implements OnInit {
+export class ToolsComponent  {
   eraser_clicked;
   clear_clicked;
   toolbar;
@@ -16,16 +16,15 @@ export class ToolsComponent implements OnInit {
     this.eraser_clicked = false;
   }
 
-  ngOnInit() {
-  }
+
 
   onClickEraser(){
     this.eraser_clicked = true;
-    this.toolbar = false;
+    document.getElementById('ToolIcon').innerText = 'Eraser';
   }
   onClickPen(){
     this.eraser_clicked = false;
-    this.toolbar = false;
+    document.getElementById('ToolIcon').innerText = 'Pen';
 
   }
   onClickClear(){

@@ -52,22 +52,21 @@ export class MainComponent implements AfterViewInit, OnInit {
       
       
       myP.setup = () => {
-        myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+        let cnv = myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+        cnv.position((myP.windowWidth-myP.width)/2,(myP.windowHeight-myP.height)/2);
         myP.background(this.custom.canvas.backgroundColor);
+        myP.cursor(myP.CROSS);
       }
       
       myP.draw = () => {
-        //Default Pen
-        myP.fill(myP.color(300,150,150));
-        myP.ellipse(10,10,80);
-        
         if(myP.mouseX<45 && myP.mouseY<45){
           this.tools.toolbar = true;
         }
-        
-        
+        if(myP.mouseX>200 || myP.mouseY>50){
+          this.tools.toolbar = false;
+        }
 
-        if(myP.mouseIsPressed && this.tools.eraser_clicked != true){
+        if(myP.mouseIsPressed && !this.tools.eraser_clicked ){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
@@ -79,7 +78,7 @@ export class MainComponent implements AfterViewInit, OnInit {
         }
 
         //Eraser is clicked
-        if(myP.mouseIsPressed &&this.tools.eraser_clicked == true ){
+        if(myP.mouseIsPressed &&this.tools.eraser_clicked ){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
