@@ -54,6 +54,7 @@ export class MainComponent implements AfterViewInit, OnInit {
       myP.setup = () => {
         let cnv = myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
         cnv.position((myP.windowWidth-myP.width)/2,(myP.windowHeight-myP.height)/2);
+        cnv.style('vertical-align', 'top');
         myP.background(this.custom.canvas.backgroundColor);
         myP.cursor(myP.CROSS);
       }
