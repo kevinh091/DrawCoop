@@ -9,6 +9,7 @@ import { NotFoundComponent } from './game/not-found/not-found.component';
 import { SwitchColorService } from './services/switch-color.service';
 import { UiComponent } from './ui/ui.component';
 import { CustomDrawingComponent } from './game/main/custom-drawing/custom-drawing.component';
+import { ToolsComponent } from './game/main/tools/tools.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full'},
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
     NotFoundComponent,
     UiComponent,
     CustomDrawingComponent,
+    ToolsComponent,
   ],
   imports: [
     BrowserModule,

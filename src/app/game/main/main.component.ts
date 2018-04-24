@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
 import {ActivatedRoute} from "@angular/router";
 import {CustomDrawingComponent} from './custom-drawing/custom-drawing.component';
+import {ToolsComponent} from './tools/tools.component';
 
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
@@ -14,28 +15,32 @@ declare var p5: any;
 })
 
 
-export class MainComponent implements OnInit {
+export class MainComponent implements AfterViewInit, OnInit {
+  @ViewChild(ToolsComponent) toolComponent;
   custom: CustomDrawingComponent;
   socket: SocketIOClient.Socket;
+  tools: ToolsComponent;
   myP: any;
   last_drew : point;
-  eraser_clicked : boolean;
-  clear_clicked : boolean;
-  toolbar = false;
 
  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
-    this.socket = io.connect('localhost:3001');
+    this.socket = io.connect('jiqing666.com:3001');
     this.route.params.subscribe(param=>{
       console.log(param.name);
       this.socket.emit('join_room', param.name);
     });
     this.custom = new CustomDrawingComponent();
+    this.tools = new ToolsComponent();
+  }
+
+  ngAfterViewInit(){
+    this.tools = this.toolComponent;
   }
  onDraw(data) {
       console.log("heard");
       //default pen values
-      this.myP.strokeWeight(data.width);
       this.myP.stroke(data.color[0], data.color[1], data.color[2]);
+      this.myP.strokeWeight(data.width);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
   }
   ngOnInit() {
@@ -43,29 +48,26 @@ export class MainComponent implements OnInit {
 
       this.myP = myP;
       myP.preload = () => {
-        console.log('preload');
       }
       
-      /*myP.keyPressed = ()  => {
-        if (myP.keyCode === myP.SHIFT) {
-          this.toolbar = true;
-        } 
-      }*/
       
       myP.setup = () => {
-        myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+        let cnv = myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+        cnv.position((myP.windowWidth-myP.width)/2,(myP.windowHeight-myP.height)/2);
+        cnv.style('vertical-align', 'top');
         myP.background(this.custom.canvas.backgroundColor);
+        myP.cursor(myP.CROSS);
       }
       
       myP.draw = () => {
-        //Default Pen
-        myP.fill(myP.color(300,150,150));
-        myP.ellipse(10,10,80);
         if(myP.mouseX<45 && myP.mouseY<45){
-          this.toolbar = true;
+          this.tools.toolbar = true;
+        }
+        if(myP.mouseX>200 || myP.mouseY>50){
+          this.tools.toolbar = false;
         }
 
-        if(myP.mouseIsPressed && this.eraser_clicked != true){
+        if(myP.mouseIsPressed && !this.tools.eraser_clicked ){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
@@ -77,7 +79,7 @@ export class MainComponent implements OnInit {
         }
 
         //Eraser is clicked
-        if(this.eraser_clicked == true && myP.mouseIsPressed ){
+        if(myP.mouseIsPressed &&this.tools.eraser_clicked ){
           let event : drawEvent = { 
             p1: { x :myP.mouseX, y:myP.mouseY }, 
             p2:this.last_drew,
@@ -88,8 +90,14 @@ export class MainComponent implements OnInit {
           this.onDraw(event);
         }
 
-        if(this.clear_clicked == true){
-          
+        if(this.tools.clear_clicked === true){
+          this.socket.emit('clear',' ');
+          this.myP.clear();
+          this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+          this.myP.background(this.custom.canvas.backgroundColor);
+          this.tools.eraser_clicked = false;
+          this.tools.toolbar = false;
+          this.tools.clear_clicked =false;
         }
 
         this.last_drew = { x : myP.mouseX, y : myP.mouseY};
@@ -98,38 +106,16 @@ export class MainComponent implements OnInit {
 
     let player = new p5(s);
     this.socket.on('draw', (data) =>{
-  //    console.log("heard");
-      this.myP.stroke(data.color[0], data.color[1], data.color[2]);
-      this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
-      this.myP.strokeWeight(data.width);
+      this.onDraw(data);
     });
 
     this.socket.on('clear', (data) =>{
-      //    console.log("heard");
           this.myP.clear();
           this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
           this.myP.background(this.custom.canvas.backgroundColor);
-        });
+    });
   }  //close on ngOnInit
 
-
-  onClickEraser(){
-    this.eraser_clicked = true;
-    this.toolbar = false;
-  }
-  onClickPen(){
-    console.log('You clicked Pen');
-    this.eraser_clicked = false;
-    this.toolbar = false;
-
-  }
-  onClickClear(){
-    this.socket.emit('clear','');
-    this.myP.clear();
-    this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
-    this.myP.background(this.custom.canvas.backgroundColor);
-    this.toolbar = false;
-  }
 }
 
 interface point{
