@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-@Component({
-  selector: 'app-custom-drawing',
-  templateUrl: './custom-drawing.component.html',
-  styleUrls: ['./custom-drawing.component.css']
-})
-export class CustomDrawingComponent implements OnInit {
+
+export class CustomDrawing implements OnInit {
 
   pen:{ color, width };
   canvas:{width, height, backgroundColor};
@@ -19,7 +15,7 @@ export class CustomDrawingComponent implements OnInit {
     this.canvas={
       width:900,
       height:600,
-      backgroundColor:[90,90,90]
+      backgroundColor:[100,100,100]
     }
    }
 

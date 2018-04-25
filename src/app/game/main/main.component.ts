@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
 import {ActivatedRoute} from "@angular/router";
-import {CustomDrawingComponent} from './custom-drawing/custom-drawing.component';
+import {CustomDrawing} from './custom-drawing';
 import {ToolsComponent} from './tools/tools.component';
 
 import * as io from 'socket.io-client';
@@ -17,7 +17,7 @@ declare var p5: any;
 
 export class MainComponent implements AfterViewInit, OnInit {
   @ViewChild(ToolsComponent) toolComponent;
-  custom: CustomDrawingComponent;
+  custom: CustomDrawing;
   socket: SocketIOClient.Socket;
   tools: ToolsComponent;
   myP: any;
@@ -29,7 +29,7 @@ export class MainComponent implements AfterViewInit, OnInit {
       console.log(param.name);
       this.socket.emit('join_room', param.name);
     });
-    this.custom = new CustomDrawingComponent();
+    this.custom = new CustomDrawing();
     this.tools = new ToolsComponent();
   }
 
@@ -59,15 +59,16 @@ export class MainComponent implements AfterViewInit, OnInit {
         myP.background(this.custom.canvas.backgroundColor);
         myP.cursor(myP.CROSS);
         document.getElementById('toolContainer').style.left = String(0+'px');
-        document.getElementById('toolContainer').style.top = String(myP.height/2+'px');
+        document.getElementById('toolContainer').style.top = String(myP.height/4+'px');
       }
       
       myP.draw = () => {
-        if(myP.mouseX>0 &&myP.mouseX<45 && myP.mouseY>0&&myP.mouseY<45){
-          this.tools.toolbar = true;
-        }
-        if(myP.mouseX>200 || myP.mouseY>50||myP.mouseX<0||myP.mouseX<0){
-          this.tools.toolbar = false;
+        if(this.tools.isDragging){
+          document.getElementById('toolContainer').style.left =
+          String(Math.max(myP.mouseX-25,0)+'px');
+          document.getElementById('toolContainer').style.top =
+          String(myP.mouseY-25+'px');
+          return;
         }
 
         if(myP.mouseIsPressed && !this.tools.eraser_clicked ){
@@ -96,7 +97,7 @@ export class MainComponent implements AfterViewInit, OnInit {
         if(this.tools.clear_clicked === true){
           this.socket.emit('clear',' ');
           this.myP.clear();
-          this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+          this.myP.createCanvas(myP.windowWidth, myP.windowHeight);
           this.myP.background(this.custom.canvas.backgroundColor);
           this.tools.eraser_clicked = false;
           this.tools.toolbar = false;
@@ -114,7 +115,7 @@ export class MainComponent implements AfterViewInit, OnInit {
 
     this.socket.on('clear', (data) =>{
           this.myP.clear();
-          this.myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
+          this.myP.createCanvas(this.myP.windowWidth, this.myP.windowHeight);
           this.myP.background(this.custom.canvas.backgroundColor);
     });
   }  //close on ngOnInit

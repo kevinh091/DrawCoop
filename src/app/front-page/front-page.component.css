@@ -1,4 +1,11 @@
-#title{
-    background: rgba(0,0,0,.5);
+#mainBar{
+    background: rgba(119, 176, 199, 0.4);
+    position: relative;
     z-index: 50;
+}
+
+#logo{
+    position:absolute;
+    left: 50%;
+    z-index: 51
 }
