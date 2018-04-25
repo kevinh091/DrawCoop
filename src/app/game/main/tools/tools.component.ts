@@ -30,4 +30,7 @@ export class ToolsComponent  {
   onClickClear(){
     this.clear_clicked =true;
   }
+  onClickIcon(){
+    
+  }
 }

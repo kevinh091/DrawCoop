@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import {MatMenuModule, MatButtonModule, MatIconModule, MatCardModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { MainComponent } from './game/main/main.component';
@@ -10,6 +11,7 @@ import { SwitchColorService } from './services/switch-color.service';
 import { UiComponent } from './ui/ui.component';
 import { CustomDrawingComponent } from './game/main/custom-drawing/custom-drawing.component';
 import { ToolsComponent } from './game/main/tools/tools.component';
+import { FrontPageComponent } from './front-page/front-page.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full'},
@@ -25,10 +27,15 @@ const appRoutes: Routes = [
     UiComponent,
     CustomDrawingComponent,
     ToolsComponent,
+    FrontPageComponent,
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MatMenuModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule
   ],
   providers: [SwitchColorService],
   bootstrap: [AppComponent]

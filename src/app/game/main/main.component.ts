@@ -37,33 +37,36 @@ export class MainComponent implements AfterViewInit, OnInit {
     this.tools = this.toolComponent;
   }
  onDraw(data) {
-      console.log("heard");
-      //default pen values
       this.myP.stroke(data.color[0], data.color[1], data.color[2]);
       this.myP.strokeWeight(data.width);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
   }
   ngOnInit() {
     const s = (myP) => {
-
+      let cnvX;
+      let cnvY;
       this.myP = myP;
       myP.preload = () => {
       }
       
       
       myP.setup = () => {
-        let cnv = myP.createCanvas(this.custom.canvas.width, this.custom.canvas.height);
-        cnv.position((myP.windowWidth-myP.width)/2,(myP.windowHeight-myP.height)/2);
+        let cnv = myP.createCanvas(myP.windowWidth, myP.windowHeight);
+        cnvX = (myP.windowWidth-myP.width)/2;
+        cnvY = (myP.windowHeight-myP.height)/1.1;
+        cnv.position(0,0);
         cnv.style('vertical-align', 'top');
         myP.background(this.custom.canvas.backgroundColor);
         myP.cursor(myP.CROSS);
+        document.getElementById('toolContainer').style.left = String(0+'px');
+        document.getElementById('toolContainer').style.top = String(myP.height/2+'px');
       }
       
       myP.draw = () => {
-        if(myP.mouseX<45 && myP.mouseY<45){
+        if(myP.mouseX>0 &&myP.mouseX<45 && myP.mouseY>0&&myP.mouseY<45){
           this.tools.toolbar = true;
         }
-        if(myP.mouseX>200 || myP.mouseY>50){
+        if(myP.mouseX>200 || myP.mouseY>50||myP.mouseX<0||myP.mouseX<0){
           this.tools.toolbar = false;
         }
 

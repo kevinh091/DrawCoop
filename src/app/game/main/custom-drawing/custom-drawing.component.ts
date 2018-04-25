@@ -19,7 +19,7 @@ export class CustomDrawingComponent implements OnInit {
     this.canvas={
       width:900,
       height:600,
-      backgroundColor:[70,70,70]
+      backgroundColor:[90,90,90]
     }
    }
 
