@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomDrawingComponent } from './custom-drawing.component';
+import { FrontPageComponent } from './front-page.component';
 
-describe('CustomDrawingComponent', () => {
-  let component: CustomDrawingComponent;
-  let fixture: ComponentFixture<CustomDrawingComponent>;
+describe('FrontPageComponent', () => {
+  let component: FrontPageComponent;
+  let fixture: ComponentFixture<FrontPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CustomDrawingComponent ]
+      declarations: [ FrontPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CustomDrawingComponent);
+    fixture = TestBed.createComponent(FrontPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,26 @@
+#mainBar{
+    background: rgba(119, 176, 199, 0.4);
+    position: relative;
+    z-index: 50;
+}
+
+#logo{
+    position:absolute;
+    right: 40%;
+    z-index: 51
+}
+
+#githubReport{
+    position:absolute;
+    border-radius: 50%;
+    widows: 50px;
+    height: 50px;
+    right:10px;
+    bottom: 20%;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color:transparent; 
+    border-color:transparent;
+}
