@@ -29,11 +29,11 @@ io.sockets.on('connection', function(socket) {
 		// When draw event is heard, broadcast it to every connected socket
 		socket.on('draw',
 			function(data){
-				var room = user_room[socket.id];
-				var people = room_people[room];
+				let room = user_room[socket.id];
+				let people = room_people[room];
 				if(people){
-					for(var i = 0; i < people.length; i++){
-						people[i].emit('draw', data);
+					for(let i = 0; i < people.length; i++){
+						people[i].id.emit('draw', data);
 					}
 				}else{
 					socket.emit('draw', data);
@@ -44,11 +44,11 @@ io.sockets.on('connection', function(socket) {
 		);
 		socket.on('clear',
 			function(data){
-				var room = user_room[socket.id];
-				var people = room_people[room];
+				let room = user_room[socket.id];
+				let people = room_people[room];
 				if(people){
-					for(var i = 0; i < people.length; i++){
-						people[i].emit('clear', data);
+					for(let i = 0; i < people.length; i++){
+						people[i].id.emit('clear', data);
 					}
 				}else{
 					socket.emit('clear', data);
@@ -60,27 +60,44 @@ io.sockets.on('connection', function(socket) {
 		socket.on('join_room',
 			function(data){
 				user_room[socket.id] = data;
+				let people = room_people[data];
 				if(!room_people[data]){
-					room_people[data] = [socket];
+					room_people[data] = [{id:socket, nickname:'Guest'}];
 				}else{
-					room_people[data].push(socket);
+					room_people[data].push({id:socket, nickname:'Guest'});
 				}
+				//socket.emit('change_name',people.map(x =>x.nickname));
 				console.log("room joined " + data +" Room Size " + room_people[data].length);
+			}
+		);
+		socket.on('change_name',
+			(newName)=>{
+				console.log(newName);
+				let people = room_people[ user_room[socket.id] ];   //[{}]
+				let targetUser = people.filter(personX=> personX.id.id===socket.id);
+				targetUser[0].nickname = newName;
+				console.log(targetUser[0].nickname);
+				for(let i = 0; i < people.length; i++){   //user type == {}
+					people[i].id.emit('change_name',people.map(x =>x.nickname));
+				}
 			}
 		);
 		// When client disconnect.
 		socket.on('disconnect', function() {
-			var room = user_room[socket.id];
+			let room = user_room[socket.id];
 			delete user_room[socket.id];
 			if(!room_people[room]){
 				return;
 			}
-			var people = room_people[room];
-			for(var i = 0; i < people.length; i++){
-				if(people[i].id == socket.id){
+			let people = room_people[room];
+			for(let i = 0; i < people.length; i++){
+				if(people[i].id.id == socket.id){
 					people.splice(i, 1);
 				}
 			}
+			for(let i = 0; i < people.length; i++){   //user type == {}
+					people[i].id.emit('change_name',people.map(x =>x.nickname));
+				}
       		console.log("Client has disconnected");
       		console.log("room left " + room + " Room Size " + people.length);
    		});

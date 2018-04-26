@@ -4,6 +4,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute} from "@angular/router";
 import {CustomDrawing} from './custom-drawing';
 import {ToolsComponent} from './tools/tools.component';
+import {RoomViewComponent} from '../../room-view/room-view.component';
 
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
@@ -18,24 +19,26 @@ declare var p5: any;
 
 export class MainComponent implements AfterViewInit, OnInit {
   @ViewChild(ToolsComponent) toolComponent;
+  @ViewChild(RoomViewComponent) roomViewComponent;
   custom: CustomDrawing;
   socket: SocketIOClient.Socket;
   tools: ToolsComponent;
+  room_view: RoomViewComponent;
   myP: any;
+  my_nickname = 'Guest';
   last_drew : point;
 
  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
-    this.socket = io.connect('jiqing666.com:3001');
+    this.socket = io.connect('localhost:3001');
     this.route.params.subscribe(param=>{
-      console.log(param.name);
       this.socket.emit('join_room', param.name);
     });
     this.custom = new CustomDrawing();
-    this.tools = new ToolsComponent();
   }
 
   ngAfterViewInit(){
     this.tools = this.toolComponent;
+    this.room_view = this.roomViewComponent;
   }
  onDraw(data) {
       this.myP.stroke(data.color[0], data.color[1], data.color[2]);
@@ -119,6 +122,12 @@ export class MainComponent implements AfterViewInit, OnInit {
           this.myP.createCanvas(this.myP.windowWidth, this.myP.windowHeight);
           this.myP.background(this.custom.canvas.backgroundColor);
     });
+    this.socket.on('change_name', (data)=>{
+        this.room_view.persons = data;
+        this.room_view.persons.unshift(this.my_nickname);
+      }
+    );
+    this.socket.emit('change_name', 'Guest');
   }  //close on ngOnInit
 
 }

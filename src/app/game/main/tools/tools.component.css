@@ -2,6 +2,10 @@
     position: relative;
     padding-left: -15px;
     padding-right: -15px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 #ToolIcon{
@@ -11,7 +15,7 @@
     border: none;
 	overflow: show;
 	position: absolute;
-    background: rgba(255, 1, 242, 0.7);
+    background: rgba(30, 30, 30, 0.7);
     -webkit-text-fill-color: seashell;
     z-index: 51;
 }

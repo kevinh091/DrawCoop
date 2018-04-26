@@ -1,0 +1,38 @@
+.room-view{
+    position: absolute;
+    bottom:1%;
+    right:0;
+	background: rgba(230, 230, 230, 0.7);
+	border-radius: 3px;
+	width: 200px;
+	height: 315px;
+	border: 2px solid rgb(59, 132, 201);
+    margin: 30px 15px 30px 15px;
+    overflow-x: hidden;
+    z-index: 52;
+}
+.yourname{
+    position: relative;
+    margin: -3px;
+    height: 35px;
+    width: 200px;
+    color: rgb(179, 214, 194);
+    background: rgba(11, 61, 68, 0.7);
+    border: 2px solid rgb(59, 132, 201);
+    display: inline-block;
+}
+.person{
+    position: relative;
+    margin: -3px;
+    height: 35px;
+    width: 200px;
+    background: transparent;
+    border: 2px solid rgb(59, 132, 201);
+    display: inline-block;
+}
+.name{
+    bottom: 4px;
+    left: 4px;
+    font-size:20px;
+    position: absolute;
+}
