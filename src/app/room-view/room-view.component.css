@@ -11,16 +11,6 @@
     overflow-x: hidden;
     z-index: 52;
 }
-.yourname{
-    position: relative;
-    margin: -3px;
-    height: 35px;
-    width: 200px;
-    color: rgb(179, 214, 194);
-    background: rgba(11, 61, 68, 0.7);
-    border: 2px solid rgb(59, 132, 201);
-    display: inline-block;
-}
 .person{
     position: relative;
     margin: -3px;
@@ -31,8 +21,37 @@
     display: inline-block;
 }
 .name{
-    bottom: 4px;
-    left: 4px;
+    height: 35px;
+    top: 5px;
+    left: 3px;
     font-size:20px;
     position: absolute;
+}
+.yourname{
+    position: relative;
+    margin: 0;
+    height: 35px;
+    width: 200px;
+    color: rgb(179, 214, 194);
+    background: rgba(7, 41, 46, 0.7);
+    border: 2px solid rgb(59, 132, 201);
+    display: inline-block;
+}
+.yourname input[type="text"]{
+    border: none;
+	border-bottom: 1px solid #fff;
+	background: transparent;
+	outline: none;
+    height: 30px;
+    width: 140px;
+	color: #fff;
+	font-size: 16px;
+}
+.change-buttom{
+    height: 30px;
+    widows: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(60,120,200,0.8);
+    color: rgb(179, 214, 194);
 }

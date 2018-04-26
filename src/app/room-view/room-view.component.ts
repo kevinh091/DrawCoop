@@ -7,12 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoomViewComponent implements OnInit {
   persons;
+  myname;
 
   constructor() { 
     this.persons = [];
+    this.myname = {name:'Guest', changed:false};
+
   }
 
   ngOnInit() {
   }
 
+  change_name(){
+    this.myname.name = document.getElementById("nameholder").value;
+    this.myname.changed = true;
+  }
 }
