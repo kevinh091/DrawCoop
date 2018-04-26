@@ -34,6 +34,6 @@ export class ToolsComponent  {
     document.getElementById('ToolIcon').innerText = 'Pen';
   }
   onClickIcon(){
-    //this.toolbar = !this.toolbar;
+    //this.toolbar = false;
   }
 }

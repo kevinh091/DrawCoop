@@ -1,6 +1,6 @@
 <div (mouseover)='toolbar=true' (mouseleave)='toolbar=false' id = toolContainer>
 <body *ngIf="toolbar; then yestoolbar else notoolbar" > this works</body>
-<button (mousedown) = 'this.isDragging =true' (mouseup) = 'this.isDragging =false'id= ToolIcon>Tools</button>
+<button (mousedown) = 'this.isDragging =true;this.toolbar = false' (mouseup) = 'this.isDragging =false'id= ToolIcon>Tools</button>
 
 <ng-template #yestoolbar>
     <button (click) = 'onClickPen()' id= Pen>Pen</button>
