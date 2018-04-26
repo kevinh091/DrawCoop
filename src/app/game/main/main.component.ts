@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
 
 import {ActivatedRoute} from "@angular/router";
 import {CustomDrawing} from './custom-drawing';
