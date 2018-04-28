@@ -29,7 +29,7 @@ export class MainComponent implements AfterViewInit, OnInit {
   last_drew : point;
 
  constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
-    this.socket = io.connect('localhost:3001');
+    this.socket = io.connect('jiqing666.com:3001');
     this.route.params.subscribe(param=>{
       this.socket.emit('join_room', param.name);
     });
@@ -73,6 +73,10 @@ export class MainComponent implements AfterViewInit, OnInit {
           document.getElementById('toolContainer').style.top =
           String(myP.mouseY-25+'px');
           return;
+        }
+        if(this.room_view.myname.changed){
+          this.socket.emit('change_name', this.room_view.myname.name);
+          this.room_view.myname.changed = false;
         }
 
         if(myP.mouseIsPressed && !this.tools.eraser_clicked ){
@@ -124,7 +128,7 @@ export class MainComponent implements AfterViewInit, OnInit {
     });
     this.socket.on('change_name', (data)=>{
         this.room_view.persons = data;
-        this.room_view.persons.unshift(this.my_nickname);
+        //this.room_view.persons.unshift(this.my_nickname);
       }
     );
     this.socket.emit('change_name', 'Guest');
