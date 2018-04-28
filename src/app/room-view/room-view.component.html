@@ -1,10 +1,12 @@
 <div class="room-view">
-    <form class="yourname">
-      <input type="text" name="" placeholder="Enter your name" id='nameholder'>
-      <button (click)="change_name()" class="change-buttom"><div>Send</div></button>
-    </form>
+    <div class="yourname">
+      <input #nameholder type="text"
+      (keyup.enter)="change_name(nameholder.value)"
+      placeholder="Enter your name" >
+    <button (click)="change_name(nameholder.value)" class="change-buttom">Change</button>
+    </div>
 
     <div class="person" *ngFor="let person of persons">
-      <div class="name">{{person}}</div>
+      <div class="names">{{person}}</div>
     </div>
 </div>

@@ -14,17 +14,17 @@
 .person{
     position: relative;
     margin: -3px;
-    height: 35px;
+    height: 34px;
     width: 200px;
     background: transparent;
     border: 2px solid rgb(59, 132, 201);
     display: inline-block;
 }
-.name{
+.names{
     height: 35px;
-    top: 5px;
+    top: 8px;
     left: 3px;
-    font-size:20px;
+    font-size:18px;
     position: absolute;
 }
 .yourname{
@@ -48,6 +48,9 @@
 	font-size: 16px;
 }
 .change-buttom{
+    position: absolute;
+    right:5px;
+    top:3px;
     height: 30px;
     widows: 30px;
     border: none;

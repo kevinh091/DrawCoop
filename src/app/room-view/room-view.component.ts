@@ -18,8 +18,9 @@ export class RoomViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  change_name(){
-    this.myname.name = document.getElementById("nameholder").value;
+  change_name(input){
+    this.myname.name = input==''? 'Guest':input;
     this.myname.changed = true;
+    console.log(this.persons);
   }
 }

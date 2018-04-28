@@ -75,8 +75,8 @@ export class MainComponent implements AfterViewInit, OnInit {
           return;
         }
         if(this.room_view.myname.changed){
-          this.room_view.myname.changed = false;
           this.socket.emit('change_name', this.room_view.myname.name);
+          this.room_view.myname.changed = false;
         }
 
         if(myP.mouseIsPressed && !this.tools.eraser_clicked ){
