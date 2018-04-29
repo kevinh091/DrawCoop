@@ -4,6 +4,10 @@
       <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
         Open Menu
       </button>
+      
+      <button   mat-raised-button (click)="openDialog()" color="primary">
+         +Collabrator
+      </button>
 
       <button mat-button onclick=" window.open('https://github.com/kevinh091/DrawCoop','_blank')" id="githubReport"> 
           <img src="./../assets/github.png" height="50"/>
