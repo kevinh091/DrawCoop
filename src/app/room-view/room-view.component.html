@@ -2,11 +2,13 @@
     <div class="yourname">
       <input #nameholder type="text"
       (keyup.enter)="change_name(nameholder.value)"
-      placeholder="Enter your name" >
+      maxlength="16"
+      placeholder=" Enter your name" >
     <button (click)="change_name(nameholder.value)" class="change-buttom">Change</button>
     </div>
 
-    <div class="person" *ngFor="let person of persons">
-      <div class="names">{{person}}</div>
+    <div id="person" *ngFor="let person of persons">
+      <div class="names">{{person[0]}}</div>
+      <button class="location">{{person[1]}}</button>
     </div>
 </div>

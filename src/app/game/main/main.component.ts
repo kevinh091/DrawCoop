@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Injectable } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
-
 import {ActivatedRoute} from "@angular/router";
 import {CustomDrawing} from './custom-drawing';
 import {ToolsComponent} from './tools/tools.component';
 import {RoomViewComponent} from '../../room-view/room-view.component';
+import {RegionService} from '../../services/regions.http.service'
 
 import * as io from 'socket.io-client';
 import { SwitchColorService } from '../../services/switch-color.service';
@@ -13,7 +13,8 @@ declare var p5: any;
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  styleUrls: ['./main.component.css'],
+  providers: [RegionService]
 })
 
 
@@ -28,8 +29,8 @@ export class MainComponent implements AfterViewInit, OnInit {
   my_nickname = 'Guest';
   last_drew : point;
 
- constructor(private route: ActivatedRoute, private switchColor: SwitchColorService) {
-    this.socket = io.connect('jiqing666.com:3001');
+ constructor(private route: ActivatedRoute, private switchColor: SwitchColorService, private regionService:RegionService) {
+    this.socket = io.connect('localhost:3001');
     this.route.params.subscribe(param=>{
       this.socket.emit('join_room', param.name);
     });
@@ -45,15 +46,12 @@ export class MainComponent implements AfterViewInit, OnInit {
       this.myP.strokeWeight(data.width);
       this.myP.line(data.p1.x, data.p1.y, data.p2.x, data.p2.y);
   }
-  ngOnInit() {
+ async ngOnInit() {
     const s = (myP) => {
       let cnvX;
       let cnvY;
       this.myP = myP;
-      myP.preload = () => {
-      }
-      
-      
+
       myP.setup = () => {
         let cnv = myP.createCanvas(myP.windowWidth, myP.windowHeight);
         cnvX = (myP.windowWidth-myP.width)/2;
@@ -115,8 +113,6 @@ export class MainComponent implements AfterViewInit, OnInit {
         this.last_drew = { x : myP.mouseX, y : myP.mouseY};
       }
     }
-
-    let player = new p5(s);
     this.socket.on('draw', (data) =>{
       this.onDraw(data);
     });
@@ -128,10 +124,11 @@ export class MainComponent implements AfterViewInit, OnInit {
     });
     this.socket.on('change_name', (data)=>{
         this.room_view.persons = data;
-        //this.room_view.persons.unshift(this.my_nickname);
       }
     );
-    this.socket.emit('change_name', 'Guest');
+    const location = await this.regionService.getRegion();
+    this.socket.emit('location', location);
+    let player = new p5(s);
   }  //close on ngOnInit
 
 }

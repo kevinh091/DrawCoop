@@ -11,7 +11,7 @@
 #ToolIcon{
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 25%;
     border: none;
 	overflow: show;
 	position: absolute;
@@ -22,27 +22,27 @@
 #Pen{
     width: 50px;
 	height: 50px;
-	border-radius: 50%;
+	border-radius: 25%;
 	overflow: show;
 	position: absolute;
-    left: 50px;
+    top: 50px;
     z-index: 1;
 }
 #Eraser{
     width: 50px;
 	height: 50px;
-	border-radius: 50%;
+	border-radius: 25%;
 	overflow: show;
 	position: absolute;
-    left: calc(100px);
+    top: calc(100px);
     z-index: 1;
 }
 #Clear{
     width: 50px;
 	height: 50px;
-	border-radius: 50%;
+	border-radius: 25%;
 	overflow: show;
 	position: absolute;
-    left: calc(150px);
+    top: calc(150px);
     z-index: 1;
 }

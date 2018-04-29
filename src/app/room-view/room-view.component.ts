@@ -6,12 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./room-view.component.css']
 })
 export class RoomViewComponent implements OnInit {
-  persons;
+  persons:Array<Array<string>>;
   myname;
 
   constructor() { 
     this.persons = [];
-    this.myname = {name:'Guest', changed:false};
+    this.myname = {name:'Guest', changed:true};
 
   }
 
@@ -21,6 +21,5 @@ export class RoomViewComponent implements OnInit {
   change_name(input){
     this.myname.name = input==''? 'Guest':input;
     this.myname.changed = true;
-    console.log(this.persons);
   }
 }

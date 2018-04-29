@@ -28,7 +28,7 @@ io.sockets.on('connection', function(socket) {
 		console.log("new client: "+socket.id);
 		// When draw event is heard, broadcast it to every connected socket
 		socket.on('draw',
-			function(data){
+			data=>{
 				let room = user_room[socket.id];
 				let people = room_people[room];
 				if(people){
@@ -43,7 +43,7 @@ io.sockets.on('connection', function(socket) {
 			}
 		);
 		socket.on('clear',
-			function(data){
+			data=>{
 				let room = user_room[socket.id];
 				let people = room_people[room];
 				if(people){
@@ -58,27 +58,33 @@ io.sockets.on('connection', function(socket) {
 			}
 		);
 		socket.on('join_room',
-			function(data){
+			data=>{
 				user_room[socket.id] = data;
 				let people = room_people[data];
 				if(!room_people[data]){
-					room_people[data] = [{id:socket, nickname:'Guest'}];
+					room_people[data] = [{id:socket, nickname:'Guest',location:''}];
 				}else{
-					room_people[data].push({id:socket, nickname:'Guest'});
+					room_people[data].push({id:socket, nickname:'Guest',location:''});
 				}
 				//socket.emit('change_name',people.map(x =>x.nickname));
 				console.log("room joined " + data +" Room Size " + room_people[data].length);
 			}
 		);
+		socket.on('location',
+			location=>{
+				let people = room_people[ user_room[socket.id] ];   //[{}]
+				let targetUser = people.filter(personX=> personX.id.id===socket.id);
+				targetUser[0].location = location;
+			}
+		)
 		socket.on('change_name',
 			(newName)=>{
-				console.log(newName);
+				newName=newName.substring(0,17);
 				let people = room_people[ user_room[socket.id] ];   //[{}]
 				let targetUser = people.filter(personX=> personX.id.id===socket.id);
 				targetUser[0].nickname = newName;
-				console.log(targetUser[0].nickname);
 				for(let i = 0; i < people.length; i++){   //user type == {}
-					people[i].id.emit('change_name',people.map(x =>x.nickname));
+					people[i].id.emit('change_name',people.map(x =>[x.nickname,x.location]));
 				}
 			}
 		);
@@ -96,7 +102,7 @@ io.sockets.on('connection', function(socket) {
 				}
 			}
 			for(let i = 0; i < people.length; i++){   //user type == {}
-					people[i].id.emit('change_name',people.map(x =>x.nickname));
+					people[i].id.emit('change_name',people.map(x =>[x.nickname,x.location]));
 				}
       		console.log("Client has disconnected");
       		console.log("room left " + room + " Room Size " + people.length);
