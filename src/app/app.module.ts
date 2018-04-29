@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { AppComponent } from './app.component';
 import { MainComponent } from './game/main/main.component';
 import { NotFoundComponent } from './game/not-found/not-found.component';
@@ -10,6 +11,8 @@ import { ToolsComponent } from './game/main/tools/tools.component';
 import { FrontPageComponent , FrontPageDialogComponent} from './front-page/front-page.component';
 import { RoomViewComponent } from './room-view/room-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpModule } from '@angular/http';
+import {MatMenuModule, MatButtonModule, MatIconModule, MatCardModule} from '@angular/material';
 import {
   MatAutocompleteModule,
   MatButtonModule,
@@ -99,6 +102,7 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
+    HttpModule,
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
