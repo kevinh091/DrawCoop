@@ -12,7 +12,6 @@ import { FrontPageComponent , FrontPageDialogComponent} from './front-page/front
 import { RoomViewComponent } from './room-view/room-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule } from '@angular/http';
-import {MatMenuModule, MatButtonModule, MatIconModule, MatCardModule} from '@angular/material';
 import {
   MatAutocompleteModule,
   MatButtonModule,
