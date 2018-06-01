@@ -1,39 +1,20 @@
 <mat-card id="mainBar">
     <img id="logo"src="./../assets/title.png" alt="Drawing Room" height="60" width="250"/>
     <mat-card-content>
-      <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
-        Open Menu
-      </button>
       
-      <button   mat-raised-button (click)="openDialog()" color="primary">
-         +Collabrator
+    <button mat-raised-button (click)="newRoom()" color="primary">
+        New Room
+     </button>
+
+      <button mat-raised-button (click)="invite()" color="primary">
+         Invite
       </button>
 
       <button mat-button onclick=" window.open('https://github.com/kevinh091/DrawCoop','_blank')" id="githubReport"> 
           <img src="./../assets/github.png" height="50"/>
       </button>
 
-  
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item [matMenuTriggerFor]="subMenu">
-          <mat-icon>settings</mat-icon>
-          <span>Settings</span>
-        </button>
-        <button mat-menu-item disabled>
-          <mat-icon>voicemail</mat-icon>
-          <span>Check voicemail</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>notifications_off</mat-icon>
-          <span>Disable alerts</span>
-        </button>
-      </mat-menu>
-  
-      <mat-menu #subMenu="matMenu">
-          <button mat-menu-item>General</button>
-          <button mat-menu-item>Display</button>
-          <button mat-menu-item>Profile</button>
-      </mat-menu>
+
   
     </mat-card-content>
   </mat-card>

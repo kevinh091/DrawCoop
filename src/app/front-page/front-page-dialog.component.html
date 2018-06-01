@@ -1,9 +1,27 @@
-<div style="tabindex : 10; opacity:0.8;">
-	<h1 mat-dialog-title>Share the link</h1>
-	<div mat-dialog-content style="tabindex: 99; z-index: 99;">
-	  <p>{{data.link}}</p>
+<div id="dialogholder">
+	<div *ngIf="isInvite; then curURL else inputRoom" mat-dialog-content class="content">
 	</div>
-	<div mat-dialog-actions>
-	  <button mat-button (click)="onNoClick()">Ok</button>
+
+	<ng-template #curURL>
+		<h1 mat-dialog-title class="content" style="color:red">Share this link</h1>
+		<p>	{{data.link}}</p>
+		<div mat-dialog-actions class="content">
+				<button mat-button (click)="onNoClick()">Copy to clipboard</button>
+				<button mat-button (click)="cancel()">Cancel</button>
+		</div>
+	</ng-template>
+
+	<ng-template #inputRoom>
+	<h1 mat-dialog-title class="content" style="color:red">Create New Room</h1>
+	<div #nameholder>
+			whiteboard.gq/ <input #roomName type="text"
+      (keyup.enter)="newRoom(roomName.value)"
+      maxlength="12"
+			placeholder=" Enter Room Name" >
 	</div>
+	<div mat-dialog-actions class="content">
+		<button mat-button (click)="newRoom(roomName.value)">Go to New Room</button>
+		<button mat-button (click)="cancel()">Cancel</button>
+	</div>
+	</ng-template>>
 </div>
