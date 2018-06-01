@@ -2,7 +2,7 @@
     position: absolute;
     bottom:1%;
     right:0;
-	background: rgba(230, 230, 230, 0.7);
+	background: rgba(255, 255,255, 0.7);
 	border-radius: 3px;
 	width: 210px;
 	height: 315px;
@@ -20,6 +20,7 @@
     border: 2px solid rgb(59, 132, 201);
     display: inline-block;
 }
+
 .names{
     height: 35px;
     top: 8px;
@@ -33,7 +34,7 @@
     height: 35px;
     width: 210px;
     color: rgb(179, 214, 194);
-    background: rgba(7, 41, 46, 0.7);
+    background: rgba(210, 255, 255, 0.7);
     border: 2px solid rgb(59, 132, 201);
     display: inline-block;
 }
@@ -44,7 +45,7 @@
 	outline: none;
     height: 30px;
     width: 150px;
-	color: #fff;
+	color: #000;
 	font-size: 16px;
 }
 .change-buttom{
@@ -56,7 +57,7 @@
     border: none;
     border-radius: 20%;
     background: rgba(60,120,200,0.8);
-    color: rgb(179, 214, 194);
+    color: rgb(255, 255, 255);
 }
 
 .location{
@@ -68,5 +69,5 @@
     border: none;
     border-radius: 20%;
     background: rgba(207, 30, 89, 0.8);
-    color: rgb(179, 214, 194);
+    color: rgb(255, 255, 255);
 }

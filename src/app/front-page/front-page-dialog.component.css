@@ -1,3 +1,21 @@
-.transparent-backdrop.in {
-  opacity: 100;
+#dialogholder{
+  opacity: 0.9;
+  background: rgb(100, 93, 93);
+  width:auto; 
+  height: auto;
+  z-index: 900;
+  display: block;
+  position: absolute;
+  top:40%;
+  left:40%;
+}
+
+.content{
+  display: flex;
+  justify-content: center;
+}
+
+#nameholder{
+  position: relative;
+  display: inline-block;
 }
