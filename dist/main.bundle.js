@@ -431,7 +431,7 @@ var MainComponent = /** @class */ (function () {
         this.switchColor = switchColor;
         this.regionService = regionService;
         this.my_nickname = 'Guest';
-        this.socket = __WEBPACK_IMPORTED_MODULE_6_socket_io_client__["connect"]('localhost:3001');
+        this.socket = __WEBPACK_IMPORTED_MODULE_6_socket_io_client__["connect"]('http://ec2-18-191-145-18.us-east-2.compute.amazonaws.com:3001');
         this.route.params.subscribe(function (param) {
             _this.socket.emit('join_room', param.name);
         });
