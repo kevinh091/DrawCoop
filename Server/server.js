@@ -30,12 +30,16 @@ io.sockets.on('connection', function(socket) {
 		
 		socket.on('draw',
 			data=>{
+				if(!room_dict[socket.id])
+					return;
 				io.to(room_dict[socket.id].room).emit('draw',data);
 			}
 		);
 		
 		socket.on('clear',
 			data=>{
+				if(!room_dict[socket.id])
+					return;
 				io.to(room_dict[socket.id].room).emit('clear',data);
 			}
 		);
@@ -52,13 +56,15 @@ io.sockets.on('connection', function(socket) {
 		
 		socket.on('location',
 			location=>{
+				if(room_dict[socket.id])
 				room_dict[socket.id].location = location;
 			}
 		);
 		
 		socket.on('change_name',
 			(newName)=>{
-
+				if(!room_dict[socket.id])
+					return;	
 				// get clients in the user's current room
 				let clients = io.sockets.adapter.rooms[room_dict[socket.id].room];
 
@@ -79,10 +85,11 @@ io.sockets.on('connection', function(socket) {
 		);
 
 		socket.on('disconnect', function() {
-
+			if(!room_dict[socket.id])
+				return;	
 			// If the room exists in data structure
 			if(room_dict[socket.id] && io.sockets.adapter.rooms[room_dict[socket.id].room]){
-
+			
 				// get room name and size
 				let roomName = room_dict[socket.id].room;
 				let roomSize = io.sockets.adapter.rooms[roomName].length;
